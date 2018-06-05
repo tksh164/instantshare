@@ -133,7 +133,7 @@ var vm = new Vue({
                     console.log('success');
                     console.log(result);
                     var entities = result.entries.sort(function (a, b) {
-                        return b.Timestamp._.valueOf() - a.Timestamp._.valueOf();
+                        return b.PostedOn._.valueOf() - a.PostedOn._.valueOf();
                     });
 
                     vm.messages = entities;
