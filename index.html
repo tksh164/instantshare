@@ -102,6 +102,7 @@ var vm = new Vue({
                 PartitionKey: { '_': 'InstantShare' },
                 RowKey: { '_': (new Date()).valueOf().toString() },
                 PosterName: { '_': this.posterName },
+                PostedOn: { '_': new Date() },
                 Message: { '_': this.message }
             };
 
