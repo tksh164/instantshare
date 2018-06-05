@@ -39,7 +39,7 @@
                 <ul class="list-group">
                     <li v-for="(message, index) in messages" v-bind:key="message.RowKey._" v-bind:class="{ 'bg-light': index % 2 == 0 }" class="list-group-item">
                         <p class="pre">{{ message.Message._ }}</p>
-                        <small class="text-muted">{{ getFooterDateTimeString(message.PostedOn._) }} - {{ message.PosterName._ }}</small>
+                        <small class="text-muted">#{{ messages.length - index }} - {{ getFooterDateTimeString(message.PostedOn._) }} - {{ message.PosterName._ }}</small>
                     </li>
                 </ul>
             </div>
