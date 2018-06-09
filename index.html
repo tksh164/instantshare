@@ -47,14 +47,14 @@
     </div>
 </div>
 
-<script src="azure-storage.table.min.js"></script>
+<script src="<AZURE_STORAGE_TABLE_JS_LIBRARY_URI>"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.min.js"></script>
 <script>
 
 // Configurations
-var storageAccountName = '<Storage Account Name>',
-    sasToken = '<SAS Token>',
-    tableName = '<Table Name>';
+var storageAccountName = '<STORAGE_ACCOUNT_NAME>',
+    sasToken = '<TABLE_SAS_TOKEN>',
+    tableName = '<TABLE_NAME>';
 
 var tableUri = 'https://' + storageAccountName + '.table.core.windows.net',
     tableService = AzureStorage.Table.createTableServiceWithSas(tableUri, sasToken);
