@@ -9,7 +9,7 @@ param (
     [string] $ResourceGroupName = 'InstantShare',
 
     [Parameter(Mandatory = $false)]
-    [string] $StorageAccountName = ('instantshare{0}' -f (Get-Date).ToString('ddHHmmss'))   
+    [string] $StorageAccountName = ('instantshare{0}' -f (Get-Date).ToString('ddHHmmss'))
 )
 
 function SetupStorageAccount
@@ -104,7 +104,7 @@ function SetupContainer
     #
     # Create a new access policy if not exists.
     #
-    
+
     $params = @{
         Context     = $StorageAccount.Context
         Container   = $container.Name
@@ -193,7 +193,7 @@ function SetupTable
 
     $newCorsRule = New-Object -TypeName 'Microsoft.WindowsAzure.Commands.Storage.Model.ResourceModel.PSCorsRule'
     $newCorsRule.AllowedOrigins = $ContainerCorsOrigin
-    $newCorsRule.AllowedMethods = 'GET', 'PUT', 'OPTIONS' 
+    $newCorsRule.AllowedMethods = 'GET', 'PUT', 'OPTIONS'
     $newCorsRule.AllowedHeaders = '*'
     $newCorsRule.ExposedHeaders = '*'
     $newCorsRule.MaxAgeInSeconds = 60 * 60 * 24
@@ -253,7 +253,7 @@ function SetupTable
         Policy  = $tableAccessPolicy.Policy
     }
     $tableSasToken = New-AzureStorageTablesasToken @params
-    
+
     $tableSasToken | Format-List -Property '*'
 
     #
@@ -296,9 +296,9 @@ function SetupJsLibrary
     {
         $libraryDownloadPath = Join-Path -Path $env:Temp -ChildPath 'azurestoragejs.instantshare.zip'
         Set-Content -LiteralPath $libraryDownloadPath -Value $webRequestResult.Content -Encoding Byte -Force
-    
+
         Write-Verbose -Message ('The library file download completed that saved to "{0}".' -f $libraryDownloadPath)
-        
+
         $params = @{
             Path      = [System.IO.Path]::GetDirectoryName($libraryDownloadPath)
             ChildPath = [System.IO.Path]::GetFileNameWithoutExtension($libraryDownloadPath)
@@ -307,19 +307,19 @@ function SetupJsLibrary
         Expand-Archive -LiteralPath $libraryDownloadPath -DestinationPath $libraryExpandFolderPath -Force
 
         $libraryFile = Get-ChildItem -LiteralPath $libraryExpandFolderPath -File -Recurse -Filter $JS_LIBRARY_FILE_NAME
-    
+
         Write-Verbose -Message ('Copy the library file to "{0}".' -f $StageFolder.FullName)
         Copy-Item -LiteralPath $libraryFile.FullName -Destination $StageFolder.FullName -Force
-    
+
         Write-Verbose -Message ('Delete downloaded file "{0}".' -f $libraryDownloadPath)
         Remove-Item -LiteralPath $libraryDownloadPath -Force
-    
+
         Write-Verbose -Message ('Delete working folder "{0}".' -f $libraryExpandFolderPath)
         Remove-Item -LiteralPath $libraryExpandFolderPath -Recurse -Force
     }
     else
     {
-        throw ('Failed download that Azure Storage JavaScript library by status code {0}.' -f $webRequestResult.StatusCode)  
+        throw ('Failed download that Azure Storage JavaScript library by status code {0}.' -f $webRequestResult.StatusCode)
     }
 
     #
@@ -385,7 +385,7 @@ function SetupHtml
     )
 
     $HTML_FILE_NAME = 'index.html'
-    
+
     #
     # Create the HTML file.
     #
@@ -481,7 +481,7 @@ $params = @{
     StorageAccount                  = $storageAccount
     ContainerName                   = $ContainerName
     AccessPolicyName                = $ContainerAccessPolicyName
-    JsLibraryUriWithSasVariableName = 'libraryUriWithSas'    
+    JsLibraryUriWithSasVariableName = 'libraryUriWithSas'
 }
 SetupJsLibrary @params
 
@@ -493,7 +493,7 @@ $params = @{
     StageFolder                = $stageFolder
     ContainerName              = $containerName
     AccessPolicyName           = $containerAccessPolicyName
-    HtmlUriWithSasVariableName = 'htmlUriWithSas'    
+    HtmlUriWithSasVariableName = 'htmlUriWithSas'
 }
 SetupHtml @params
 
