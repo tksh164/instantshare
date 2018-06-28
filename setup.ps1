@@ -289,7 +289,7 @@ function SetupJsLibrary
     # Download the Azure Storage JavaScript Library.
     #
 
-    Write-Verbose -Message 'Download Azure Storage JavaScript Client Library for Browsers.'
+    Write-Verbose -Message 'Download the Azure Storage JavaScript Client Library for Browsers.'
 
     $libraryDownloadPath = Join-Path -Path $env:Temp -ChildPath 'azurestoragejs.instantshare.zip'
     Invoke-WebRequest -Method Get -Uri $JS_LIBRARY_DOWNLOAD_URI -OutFile $libraryDownloadPath -UseBasicParsing
