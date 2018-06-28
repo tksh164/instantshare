@@ -291,36 +291,34 @@ function SetupJsLibrary
 
     Write-Verbose -Message 'Download Azure Storage JavaScript Client Library for Browsers.'
 
-    $webRequestResult = Invoke-WebRequest -Method Get -Uri $JS_LIBRARY_DOWNLOAD_URI
-    if ($webRequestResult.StatusCode -eq 200)
+    $libraryDownloadPath = Join-Path -Path $env:Temp -ChildPath 'azurestoragejs.instantshare.zip'
+    Invoke-WebRequest -Method Get -Uri $JS_LIBRARY_DOWNLOAD_URI -OutFile $libraryDownloadPath -UseBasicParsing
+
+    $zipSignature = Get-Content -LiteralPath $libraryDownloadPath -Encoding Byte -TotalCount 4
+    if ((Compare-Object -ReferenceObject 0x50,0x4b,0x3,0x4 -DifferenceObject $zipSignature -PassThru) -ne $null)
     {
-        $libraryDownloadPath = Join-Path -Path $env:Temp -ChildPath 'azurestoragejs.instantshare.zip'
-        Set-Content -LiteralPath $libraryDownloadPath -Value $webRequestResult.Content -Encoding Byte -Force
-
-        Write-Verbose -Message ('The library file download completed that saved to "{0}".' -f $libraryDownloadPath)
-
-        $params = @{
-            Path      = [System.IO.Path]::GetDirectoryName($libraryDownloadPath)
-            ChildPath = [System.IO.Path]::GetFileNameWithoutExtension($libraryDownloadPath)
-        }
-        $libraryExpandFolderPath = Join-Path @params
-        Expand-Archive -LiteralPath $libraryDownloadPath -DestinationPath $libraryExpandFolderPath -Force
-
-        $libraryFile = Get-ChildItem -LiteralPath $libraryExpandFolderPath -File -Recurse -Filter $JS_LIBRARY_FILE_NAME
-
-        Write-Verbose -Message ('Copy the library file to "{0}".' -f $StageFolder.FullName)
-        Copy-Item -LiteralPath $libraryFile.FullName -Destination $StageFolder.FullName -Force
-
-        Write-Verbose -Message ('Delete downloaded file "{0}".' -f $libraryDownloadPath)
-        Remove-Item -LiteralPath $libraryDownloadPath -Force
-
-        Write-Verbose -Message ('Delete working folder "{0}".' -f $libraryExpandFolderPath)
-        Remove-Item -LiteralPath $libraryExpandFolderPath -Recurse -Force
+        throw ('Failed to the Azure Storage JavaScript library download, the response located at "{0}".' -f $libraryDownloadPath)
     }
-    else
-    {
-        throw ('Failed download that Azure Storage JavaScript library by status code {0}.' -f $webRequestResult.StatusCode)
+
+    Write-Verbose -Message ('The library file download completed that saved to "{0}".' -f $libraryDownloadPath)
+
+    $params = @{
+        Path      = [System.IO.Path]::GetDirectoryName($libraryDownloadPath)
+        ChildPath = [System.IO.Path]::GetFileNameWithoutExtension($libraryDownloadPath)
     }
+    $libraryExpandFolderPath = Join-Path @params
+    Expand-Archive -LiteralPath $libraryDownloadPath -DestinationPath $libraryExpandFolderPath -Force
+
+    $libraryFile = Get-ChildItem -LiteralPath $libraryExpandFolderPath -File -Recurse -Filter $JS_LIBRARY_FILE_NAME
+
+    Write-Verbose -Message ('Copy the library file to "{0}".' -f $StageFolder.FullName)
+    Copy-Item -LiteralPath $libraryFile.FullName -Destination $StageFolder.FullName -Force
+
+    Write-Verbose -Message ('Delete downloaded file "{0}".' -f $libraryDownloadPath)
+    Remove-Item -LiteralPath $libraryDownloadPath -Force
+
+    Write-Verbose -Message ('Delete working folder "{0}".' -f $libraryExpandFolderPath)
+    Remove-Item -LiteralPath $libraryExpandFolderPath -Recurse -Force
 
     #
     # Upload the Azure Storage JavaScript Library.
