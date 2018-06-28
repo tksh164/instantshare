@@ -294,8 +294,8 @@ function SetupJsLibrary
     $libraryDownloadPath = Join-Path -Path $env:Temp -ChildPath 'azurestoragejs.instantshare.zip'
     Invoke-WebRequest -Method Get -Uri $JS_LIBRARY_DOWNLOAD_URI -OutFile $libraryDownloadPath -UseBasicParsing
 
-    $zipSignature = Get-Content -LiteralPath $libraryDownloadPath -Encoding Byte -TotalCount 4
-    if ((Compare-Object -ReferenceObject 0x50,0x4b,0x3,0x4 -DifferenceObject $zipSignature -PassThru) -ne $null)
+    $fileSignature = Get-Content -LiteralPath $libraryDownloadPath -Encoding Byte -TotalCount 4
+    if ((Compare-Object -ReferenceObject 0x50,0x4b,0x3,0x4 -DifferenceObject $fileSignature -PassThru) -ne $null)
     {
         throw ('Failed to the Azure Storage JavaScript library download, the response located at "{0}".' -f $libraryDownloadPath)
     }
