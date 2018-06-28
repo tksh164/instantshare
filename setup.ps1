@@ -294,6 +294,7 @@ function SetupJsLibrary
     $libraryDownloadPath = Join-Path -Path $env:Temp -ChildPath 'azurestoragejs.instantshare.zip'
     Invoke-WebRequest -Method Get -Uri $JS_LIBRARY_DOWNLOAD_URI -OutFile $libraryDownloadPath -UseBasicParsing
 
+    # Verify the file type of downloaded file by matching with zip file signature.
     $fileSignature = Get-Content -LiteralPath $libraryDownloadPath -Encoding Byte -TotalCount 4
     if ((Compare-Object -ReferenceObject 0x50,0x4b,0x3,0x4 -DifferenceObject $fileSignature -PassThru) -ne $null)
     {
