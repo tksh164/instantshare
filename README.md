@@ -11,7 +11,7 @@ This tool setup simple chat environment on Azure.
 ## How to use this tool
 
 ```
-PS > .\setup
+PS > .\setup.ps1
 ....
 Failed: 0.
 https://instantshare20005242.blob.core.windows.net/instantshare/index.html?sv=2018-03-28&sr=b&si=CInstantShare&sig=tNj1Hg%2Fh7OajibJvH2ZxixvifIBvpJwhg8bh0HMUW8M%3D
