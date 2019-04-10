@@ -28,7 +28,7 @@ function SetupStorageAccount
         [string] $StorageAccountVariableName
     )
 
-    $storageAccount = Get-AzureRmStorageAccount -ResourceGroupName $ResourceGroupName -Name $StorageAccountName -ErrorAction SilentlyContinue
+    $storageAccount = Get-AzStorageAccount -ResourceGroupName $ResourceGroupName -Name $StorageAccountName -ErrorAction SilentlyContinue
 
     if ($storageAccount -ne $null)
     {
@@ -39,9 +39,9 @@ function SetupStorageAccount
         Write-verbose -Message ('The storage account "{0}" was not found within the resource group "{1}".' -f $StorageAccountName, $ResourceGroupName)
 
         Write-Verbose -Message 'Create a new resource group if the resource group does not exist.'
-        New-AzureRMResourceGroup -Name $ResourceGroupName -Location $Location -Force
+        New-AzResourceGroup -Name $ResourceGroupName -Location $Location -Force
 
-        $nameAvailability = Get-AzureRmStorageAccountNameAvailability -Name $StorageAccountName
+        $nameAvailability = Get-AzStorageAccountNameAvailability -Name $StorageAccountName
         if ($nameAvailability.NameAvailable)
         {
             Write-Verbose -Message ('Create a new storage account "{0}" within the resource group "{1}".' -f $StorageAccountName, $ResourceGroupName)
@@ -52,7 +52,7 @@ function SetupStorageAccount
                 SkuName           = 'Standard_LRS'
                 Kind              = 'Storage'
             }
-            $storageAccount = New-AzureRmStorageAccount @params
+            $storageAccount = New-AzStorageAccount @params
         }
         else {
             throw $nameAvailability.Message
@@ -88,7 +88,7 @@ function SetupContainer
     # Create a new container if not exists.
     #
 
-    $container = Get-AzureStorageContainer -Context $StorageAccount.Context -Name $ContainerName -ErrorAction SilentlyContinue
+    $container = Get-AzStorageContainer -Context $StorageAccount.Context -Name $ContainerName -ErrorAction SilentlyContinue
 
     if ($container -ne $null)
     {
@@ -96,7 +96,7 @@ function SetupContainer
     }
     else {
         Write-Verbose -Message ('Create a new container "{0}" within the storage account "{1}".' -f $ContainerName, $StorageAccount.StorageAccountName)
-        $container = New-AzureStorageContainer -Context $StorageAccount.Context -Name $ContainerName -Permission Off
+        $container = New-AzStorageContainer -Context $StorageAccount.Context -Name $ContainerName -Permission Off
     }
 
     $container | Format-List -Property @{ Label = 'ContainerName'; Expression = { $_.Name } }, 'PublicAccess'
@@ -111,7 +111,7 @@ function SetupContainer
         Policy      = $AccessPolicyName
         ErrorAction = [System.Management.Automation.ActionPreference]::SilentlyContinue
     }
-    $containerAccessPolicy = Get-AzureStorageContainerStoredAccessPolicy @params
+    $containerAccessPolicy = Get-AzStorageContainerStoredAccessPolicy @params
 
     if ($containerAccessPolicy -ne $null)
     {
@@ -127,14 +127,14 @@ function SetupContainer
             StartTime  = Get-Date
             ExpiryTime = (Get-Date).AddDays(21)  # Until three weeks after.
         }
-        [void](New-AzureStorageContainerStoredAccessPolicy @params)
+        [void](New-AzStorageContainerStoredAccessPolicy @params)
 
         $params = @{
             Context   = $StorageAccount.Context
             Container = $container.Name
             Policy    = $AccessPolicyName
         }
-        $containerAccessPolicy = Get-AzureStorageContainerStoredAccessPolicy @params
+        $containerAccessPolicy = Get-AzStorageContainerStoredAccessPolicy @params
     }
 
     $containerAccessPolicy | Format-List -Property @{ Label = 'PolicyName'; Expression = { $_.Policy } }, 'Permissions', 'StartTime', 'ExpiryTime'
@@ -171,14 +171,14 @@ function SetupTable
     # Create a new table if not exists.
     #
 
-    $table = Get-AzureStorageTable -Context $StorageAccount.Context -Name $TableName -ErrorAction SilentlyContinue
+    $table = Get-AzStorageTable -Context $StorageAccount.Context -Name $TableName -ErrorAction SilentlyContinue
     if ($table -ne $null)
     {
         Write-verbose -Message ('The table "{0}" was found within the storage account "{1}".' -f $TableName, $StorageAccount.StorageAccountName)
     }
     else {
         Write-Verbose -Message ('Create a new table "{0}" within the storage account "{1}".' -f $TableName, $StorageAccount.StorageAccountName)
-        $table = New-AzureStorageTable -Context $StorageAccount.Context -Name $TableName
+        $table = New-AzStorageTable -Context $StorageAccount.Context -Name $TableName
     }
 
     $table | Format-List -Property @{ Label = 'TableName'; Expression = { $_.Name } }, 'Uri'
@@ -198,9 +198,9 @@ function SetupTable
     $newCorsRule.ExposedHeaders = '*'
     $newCorsRule.MaxAgeInSeconds = 60 * 60 * 24
 
-    $corsRules = Get-AzureStorageCORSRule -COntext $StorageAccount.Context -ServiceType Table
+    $corsRules = Get-AzStorageCORSRule -COntext $StorageAccount.Context -ServiceType Table
     $corsRules = $corsRules + $newCorsRule
-    Set-AzureStorageCORSRule -Context $StorageAccount.Context -ServiceType Table -CorsRules $corsRules
+    Set-AzStorageCORSRule -Context $StorageAccount.Context -ServiceType Table -CorsRules $corsRules
 
     $corsRules | Format-List -Property '*'
 
@@ -214,7 +214,7 @@ function SetupTable
         Policy      = $AccessPolicyName
         ErrorAction = [System.Management.Automation.ActionPreference]::SilentlyContinue
     }
-    $tableAccessPolicy = Get-AzureStorageTableStoredAccessPolicy @params
+    $tableAccessPolicy = Get-AzStorageTableStoredAccessPolicy @params
 
     if ($tableAccessPolicy -ne $null)
     {
@@ -231,14 +231,14 @@ function SetupTable
             StartTime  = Get-Date
             ExpiryTime = (Get-Date).AddDays(21)  # Until three weeks after.
         }
-        [void](New-AzureStorageTableStoredAccessPolicy @params)
+        [void](New-AzStorageTableStoredAccessPolicy @params)
 
         $params = @{
             Context = $StorageAccount.Context
             Table   = $table.Name
             Policy  = $AccessPolicyName
         }
-        $tableAccessPolicy = Get-AzureStorageTableStoredAccessPolicy @params
+        $tableAccessPolicy = Get-AzStorageTableStoredAccessPolicy @params
     }
 
     $tableAccessPolicy | Format-List -Property @{ Label = 'PolicyName'; Expression = { $_.Policy } }, 'Permissions', 'StartTime', 'ExpiryTime'
@@ -252,7 +252,7 @@ function SetupTable
         Name    = $table.name
         Policy  = $tableAccessPolicy.Policy
     }
-    $tableSasToken = New-AzureStorageTablesasToken @params
+    $tableSasToken = New-AzStorageTablesasToken @params
 
     $tableSasToken | Format-List -Property '*'
 
@@ -335,14 +335,14 @@ function SetupJsLibrary
         Properties = @{ ContentType = 'application/javascript' }
         Force      = $true
     }
-    $libraryBlob = Set-AzureStorageBlobContent @params
+    $libraryBlob = Set-AzStorageBlobContent @params
 
     $params = @{
         Context   = $libraryBlob.Context
         CloudBlob = $libraryBlob.ICloudBlob
         Policy    = $AccessPolicyName
     }
-    $blobSasToken = New-AzureStorageBlobSASToken @params
+    $blobSasToken = New-AzStorageBlobSASToken @params
 
     $libraryUriWithSas = $libraryBlob.ICloudBlob.Uri.AbsoluteUri + $blobSasToken
 
@@ -414,14 +414,14 @@ function SetupHtml
         Properties = @{ ContentType = 'text/html' }
         Force      = $true
     }
-    $htmlBlob = Set-AzureStorageBlobContent @params
+    $htmlBlob = Set-AzStorageBlobContent @params
 
     $params = @{
         Context   = $htmlBlob.Context
         CloudBlob = $htmlBlob.ICloudBlob
         Policy    = $AccessPolicyName
     }
-    $blobSasToken = New-AzureStorageBlobSASToken @params
+    $blobSasToken = New-AzStorageBlobSASToken @params
 
     $htmlUriWithSas = $htmlBlob.ICloudBlob.Uri.AbsoluteUri + $blobSasToken
 
@@ -443,7 +443,7 @@ $tableName = 'instantshare'
 $tableAccessPolicyName = 'TInstantShare'
 $stageFolderName = 'stage'
 
-Get-AzureRmContext
+Get-AzContext
 
 $params = @{
     ResourceGroupName          = $ResourceGroupName
