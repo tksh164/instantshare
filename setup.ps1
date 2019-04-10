@@ -295,7 +295,21 @@ function SetupJsLibrary
     Invoke-WebRequest -Method Get -Uri $JS_LIBRARY_DOWNLOAD_URI -OutFile $libraryDownloadPath -UseBasicParsing
 
     # Verify the file type of downloaded file by matching with zip file signature.
-    $fileSignature = Get-Content -LiteralPath $libraryDownloadPath -Encoding Byte -TotalCount 4
+    $params = @{
+        LiteralPath = $libraryDownloadPath
+        TotalCount  = 4
+    }
+    if ((Get-Command -Name 'Get-Content').Parameters.ContainsKey('AsByteStream'))
+    {
+        # For PowerShell Core 6
+        $params.AsByteStream = $true
+    }
+    else
+    {
+        # For PowerShell 5.x
+        $params.Encoding = [Microsoft.PowerShell.Commands.FileSystemCmdletProviderEncoding]::Byte
+    }
+    $fileSignature = Get-Content @params
     if ((Compare-Object -ReferenceObject 0x50,0x4b,0x3,0x4 -DifferenceObject $fileSignature -PassThru) -ne $null)
     {
         throw ('Failed to the Azure Storage JavaScript library download, the response located at "{0}".' -f $libraryDownloadPath)
@@ -498,6 +512,9 @@ SetupHtml @params
 
 [PSCustomObject] @{  AppUri = $htmlUriWithSas } | Format-List
 
-Set-Clipboard -Value $htmlUriWithSas
-Write-Host 'Copied the AppUri to your clipboard.' -ForegroundColor Yellow
-Write-Host ''
+if ((Get-Command -Name 'Set-Clipboard' -ErrorAction SilentlyContinue) -ne $null)
+{
+    Set-Clipboard -Value $htmlUriWithSas
+    Write-Host 'Copied the AppUri to your clipboard.' -ForegroundColor Yellow
+    Write-Host ''
+}
