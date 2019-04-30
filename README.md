@@ -18,7 +18,7 @@ InstantShare uses just a storage account in Azure that meaning the cost is very 
 
 The setup is super easy and complete in a minute.
 
-1. [Download the zip file](https://github.com/tksh164/InstantShare/archive/master.zip) from GitHub.
+1. [Download the zip file](https://github.com/tksh164/InstantShare/archive/master.zip) from GitHub (this page).
 
 2. Unblock the downloaded zip file and expand it.
 
@@ -48,11 +48,11 @@ The setup is super easy and complete in a minute.
 
 ## Notice
 
-- We do not recommend share any secrets (e.g. password) on InstantShare. Because InstantShare does not have authentication and authorization feature. This meaning anonymous users are can access if they know the URL of InstantShare.
+- We do not recommend share any secrets (e.g. password) on InstantShare. Because InstantShare does not have authentication and authorization features. This meaning anonymous users are can access if they know the URL of InstantShare.
 
 ## Tips
 
 - You can change the accessible period from the access policy settings on the InstantShare container within the storage account in Azure portal.
-- InstantShare does not have the edit/delete feature. But you can do it from [Azure Storage Explorer](https://azure.microsoft.com/en-us/features/storage-explorer/).
+- InstantShare does not have the edit/delete features. But you can do it from [Azure Storage Explorer](https://azure.microsoft.com/en-us/features/storage-explorer/) or Azure Storage Explorer in Azure portal.
 - You can customize the appearance by edit index.html file and re-upload it.
 - We recommend that use InstantShare with URL shortening services because InstantShare's URL is long.
