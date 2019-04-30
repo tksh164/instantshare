@@ -3,7 +3,7 @@
 ## About this tool
 This tool setup simple chat environment on Azure.
 
-![](instantshare1.png)
+![InstantShare](image/instantshare1.png)
 
 ## Prerequisites
 - PowerShell
