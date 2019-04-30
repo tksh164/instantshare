@@ -40,7 +40,7 @@ The setup is super easy and complete in a minute.
     PS > .\setup.ps1 -Verbose
     ```
 
-5. Open the InstantShare using the URL.
+5. Open the InstantShare URL.
 
     ```
     AppUri : https://instantshare10215101.blob.core.windows.net/instantshare/index.html?sv=2017-07-29&sr=b&si=CInstantShare&sig=Jttr%2FLxb6W82y4sTei%2FTNSvSssUK4vIDJAwAX6PpMZM%3D
