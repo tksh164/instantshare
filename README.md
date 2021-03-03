@@ -56,3 +56,7 @@ The setup is super easy and complete in a minute.
 - InstantShare does not have the edit/delete features. But you can do it from [Azure Storage Explorer](https://azure.microsoft.com/en-us/features/storage-explorer/) or Azure Storage Explorer in Azure portal.
 - You can customize the appearance by edit index.html file and re-upload it.
 - We recommend that use InstantShare with URL shortening services because InstantShare's URL is long.
+
+## License
+
+Copyright (c) 2018-present Takeshi Katano. All rights reserved. This software is released under the [MIT License](https://github.com/tksh164/InstantShare/blob/master/LICENSE).
