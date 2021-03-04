@@ -9,7 +9,7 @@ InstantShare uses just a storage account in Azure that meaning the cost is very 
 ## Prerequisites
 
 - PowerShell
-    - PowerShell 5.x and [PowerShell Core 6.x](https://github.com/PowerShell/PowerShell) are supported.
+    - PowerShell 5.x and [PowerShell Core 7.x](https://github.com/PowerShell/PowerShell) are supported.
 - [Azure PowerShell (Az module)](https://docs.microsoft.com/en-us/powershell/azure/install-az-ps)
 - Azure subscription
     - The setup script creates a resource group and a storage account in your Azure subscription. You need enough permission against the subscription.
