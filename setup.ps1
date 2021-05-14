@@ -52,6 +52,7 @@ function SetupStorageAccount
                 SkuName                = 'Standard_LRS'
                 Kind                   = 'Storage'
                 EnableHttpsTrafficOnly = $true
+                AllowBlobPublicAccess  = $false
             }
             $storageAccount = New-AzStorageAccount @params
         }
