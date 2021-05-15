@@ -46,11 +46,14 @@ function SetupStorageAccount
         {
             Write-Verbose -Message ('Create a new storage account "{0}" within the resource group "{1}".' -f $StorageAccountName, $ResourceGroupName)
             $params = @{
-                ResourceGroupName = $ResourceGroupName
-                Location          = $Location
-                Name              = $StorageAccountName
-                SkuName           = 'Standard_LRS'
-                Kind              = 'Storage'
+                ResourceGroupName      = $ResourceGroupName
+                Location               = $Location
+                Name                   = $StorageAccountName
+                SkuName                = 'Standard_LRS'
+                Kind                   = 'Storage'
+                EnableHttpsTrafficOnly = $true
+                MinimumTlsVersion      = 'TLS1_2'
+                AllowBlobPublicAccess  = $false
             }
             $storageAccount = New-AzStorageAccount @params
         }
