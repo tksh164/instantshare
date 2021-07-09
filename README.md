@@ -1,5 +1,7 @@
 # InstantShare
 
+[![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/tksh164/instantshare)
+
 InstantShare provides an information sharing space in instantly. For example, share information from trainer to audience in the lightweight classroom workshop, also share information with each other.
 
 InstantShare uses just a storage account in Azure that meaning the cost is very low (almost zero).
