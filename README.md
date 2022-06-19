@@ -1,6 +1,6 @@
 # InstantShare
 
-InstantShare provides an information sharing space in instantly. For example, share information from trainer to audience in the lightweight classroom workshop, also share information with each other.
+InstantShare provides an information sharing space in instantly. For example, share the information from a trainer to audience in the lightweight classroom workshop, also share the information with each other.
 
 InstantShare uses just a storage account in Azure that meaning the cost is very low (almost zero).
 
